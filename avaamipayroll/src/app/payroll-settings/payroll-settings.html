@@ -1,0 +1,46 @@
+<div class="settings-container">
+    <div class="header">
+        <h2>Payroll Configuration</h2>
+        <p>Define the percentages used for monthly salary calculations.</p>
+    </div>
+
+    <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()" class="settings-card">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Employee PF (%)</label>
+                <input type="number" formControlName="pf_employee_percent" placeholder="e.g. 12">
+            </div>
+
+            <div class="form-group">
+                <label>Employer PF (%)</label>
+                <input type="number" formControlName="pf_employer_percent" placeholder="e.g. 12">
+            </div>
+
+            <div class="form-group">
+                <label>Income Tax (%)</label>
+                <input type="number" formControlName="tax_percent" placeholder="e.g. 5">
+            </div>
+
+            <div class="form-group">
+                <label>HRA Allowance (%)</label>
+                <input type="number" formControlName="hra_percent" placeholder="e.g. 40">
+            </div>
+
+            <div class="form-group">
+                <label>Default Special Allowance (₹)</label>
+                <input type="number" formControlName="special_allowance_default">
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" [disabled]="settingsForm.invalid || isSaving">
+                {{ isSaving ? 'Saving...' : 'Save Configuration' }}
+            </button>
+        </div>
+    </form>
+
+    <div class="calculation-preview">
+        <h3>Calculation Logic Preview</h3>
+        <p><strong>Net Pay =</strong> (Basic + HRA + Special) - (PF + Tax)</p>
+    </div>
+</div>

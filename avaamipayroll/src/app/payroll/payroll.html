@@ -1,36 +1,53 @@
-<div class="payroll-header">
-  <div>
-    <h1>Payroll Processing</h1>
-    <p>Period: <strong>{{ currentMonth }}</strong></p>
+<div class="payroll-container">
+  <div class="payroll-header">
+    <div>
+      <h1>Payroll Processing</h1>
+      <p>Period: <strong>{{ currentMonth }}</strong></p>
+    </div>
+    <button class="btn-process">Confirm & Run Payroll</button>
   </div>
-  <button class="btn-process">Run Payroll</button>
-</div>
 
-<div class="payroll-card">
-  <table class="payroll-table">
-    <thead>
-      <tr>
-        <th>Employee Name</th>
-        <th>Designation</th> <th>Basic Pay</th>
-        <th>HRA</th>
-        <th>PF</th>
-        <th>Tax</th>
-        <th>Net Salary</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (emp of employees; track emp.id) {
+  <div class="payroll-card">
+    <table class="payroll-table">
+      <thead>
         <tr>
-          <td><strong>{{ emp.first_name }} {{ emp.last_name }}</strong></td>
-          <td>{{ emp.designation }}</td>
-          <td>{{ emp.salary | currency:'INR' }}</td> <td>{{ emp.hra | currency:'INR' }}</td>
-          <td class="deduction">-{{ emp.pf | currency:'INR' }}</td>
-          <td class="deduction">-{{ emp.tax | currency:'INR' }}</td>
-          <td class="net-pay">
-            {{ (emp.salary + emp.hra) - (emp.pf + emp.tax) | currency:'INR' }}
-          </td>
+          <th>Employee Details</th>
+          <th>Basic Pay</th>
+          <th>HRA ({{payrollConfig.hra_percent}}%)</th>
+          <th>PF ({{payrollConfig.pf_percent}}%)</th>
+          <th>Tax ({{payrollConfig.tax_percent}}%)</th>
+          <th>Net Salary</th>
+          <th>Action</th>
         </tr>
-      }
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @for (emp of employees; track emp.id) {
+          <tr>
+            <td>
+              <div class="emp-info">
+                <strong>{{ emp.first_name }} {{ emp.last_name }}</strong>
+                <span>{{ emp.designation }}</span>
+              </div>
+            </td>
+            <td>{{ emp.basic_salary | currency:'INR' }}</td>
+            <td>{{ emp.calc_hra | currency:'INR' }}</td>
+            <td class="deduction">-{{ emp.calc_pf | currency:'INR' }}</td>
+            <td class="deduction">-{{ emp.calc_tax | currency:'INR' }}</td>
+            <td class="net-pay">
+              <strong>{{ emp.calc_net | currency:'INR' }}</strong>
+            </td>
+            <td>
+              <button (click)="downloadPayslip(emp.id)" class="btn-download">
+                Download PDF
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    
+    <div *ngIf="employees.length === 0" class="no-data">
+        No employees found. Add employees with salary details to see payroll.
+    </div>
+  </div>
 </div>

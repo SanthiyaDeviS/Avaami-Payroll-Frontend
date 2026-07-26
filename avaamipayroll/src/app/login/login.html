@@ -1,18 +1,22 @@
 <div class="auth-wrapper">
   <div class="auth-card">
     <div class="auth-header">
-      <div class="logo-container">
+      <div class="logo-container" *ngIf="!showResetFields">
         <img src="assets/logo.png" alt="Avaami Logo" class="main-logo">
       </div>
-      <h2 class="auth-title">Welcome Back</h2>
-      <p class="auth-subtitle">Please enter your details to sign in</p>
+      <h2 class="auth-title">
+        {{ showResetFields ? 'Secure Your Account' : 'Welcome Back' }}
+      </h2>
+      <p class="auth-subtitle">
+        {{ showResetFields ? 'Please set a permanent password to continue' : 'Please enter your details to sign in' }}
+      </p>
     </div>
 
     <div class="error-banner" *ngIf="errorMessage">
       {{ errorMessage }}
     </div>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+    <form *ngIf="!showResetFields" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
       <div class="form-group">
         <label>Official Email Address</label>
         <input type="email" formControlName="email" placeholder="name@company.com"
@@ -37,6 +41,34 @@
 
       <div class="auth-footer">
         <p>Don't have an account? <a routerLink="/signup">Sign up</a></p>
+      </div>
+    </form>
+
+    <form *ngIf="showResetFields" [formGroup]="resetForm" (ngSubmit)="onResetPassword()" class="auth-form">
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" formControlName="newPassword" placeholder="At least 6 characters"
+               [class.error]="resetForm.get('newPassword')?.invalid && resetForm.get('newPassword')?.touched">
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" formControlName="confirmPassword" placeholder="Repeat your new password"
+               [class.error]="resetForm.get('confirmPassword')?.invalid && resetForm.get('confirmPassword')?.touched">
+        
+        <small class="error-text" *ngIf="resetForm.errors?.['mismatch'] && resetForm.get('confirmPassword')?.touched">
+          Passwords do not match!
+        </small>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="resetForm.invalid">
+        <span>Update & Continue</span>
+      </button>
+
+      <div class="auth-footer">
+        <button type="button" class="btn-link" (click)="showResetFields = false">
+          Go back to Login
+        </button>
       </div>
     </form>
   </div>

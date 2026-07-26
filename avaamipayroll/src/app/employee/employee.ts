@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core'; // 1. Import OnInit
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EmployeeService } from '../services/employee'; // 2. Import Service
-import { AuthService } from '../../auth.service'; // 3. Import Auth Service
-import { RouterModule } from '@angular/router'; // 4. Import for Routing
+import { EmployeeService } from '../services/employee';
+import { AuthService } from '../../auth.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-employee',
   standalone: true,
-  imports: [CommonModule, RouterModule], // 5. Add RouterModule
+  imports: [CommonModule, RouterModule],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
 })
-export class EmployeesComponent implements OnInit { // 6. Implement OnInit
-  employees: any[] = []; // 7. Change to hold API data
+export class EmployeesComponent implements OnInit {
+  employees: any[] = [];
+  companyName: string = '';
 
   constructor(
     private employeeService: EmployeeService,
@@ -20,24 +21,30 @@ export class EmployeesComponent implements OnInit { // 6. Implement OnInit
   ) {}
 
   ngOnInit(): void {
-    // 8. Call backend when component loads
+    // 1. Get company name from local storage for the UI header
+    this.companyName = localStorage.getItem('company_name') || 'Your Company';
+    
+    // 2. Fetch the latest list from the backend
     this.loadEmployees();
   }
 
   loadEmployees() {
     this.authService.getIdToken().then(token => {
+      if (!token) return;
+
       this.employeeService.getEmployees(token).subscribe({
         next: (data) => {
-          // 9. Map API data to your table structure
+          // Map backend data to UI format
           this.employees = data.map(emp => ({
             id: emp.id,
             name: `${emp.first_name} ${emp.last_name}`,
             role: emp.designation,
-            department: 'IT', // Add this to backend later
-            status: 'Active'  // Add this to backend later
+            email: emp.email,
+            salary: emp.basic_salary,
+            status: 'Active'
           }));
         },
-        error: (err) => console.error('Error fetching employees', err)
+        error: (err) => console.error('Error fetching employees:', err)
       });
     });
   }

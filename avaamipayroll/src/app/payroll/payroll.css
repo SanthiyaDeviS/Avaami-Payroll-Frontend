@@ -54,3 +54,56 @@
 
 .paid { background: #dcfce7; color: #166534; }
 .pending { background: #fef3c7; color: #92400e; }
+
+
+/* Styling for the Download Button in the table */
+.btn-download {
+  background-color: transparent;
+  color: #6366f1; /* Professional Indigo */
+  border: 1.5px solid #6366f1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-download:hover {
+  background-color: #6366f1;
+  color: white;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+
+/* Optional: If you want to add a small PDF icon effect later */
+.btn-download::before {
+  content: '⬇ '; /* Simple downward arrow */
+  margin-right: 4px;
+}
+
+/* Formatting for the 'Action' column specifically */
+.payroll-table td:last-child {
+  text-align: center;
+  width: 120px;
+}
+
+/* Small helper for the designation text under the name */
+.text-muted {
+  font-size: 11px;
+  color: #94a3b8;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Success/Error text helpers */
+.text-danger {
+  color: #ef4444;
+}
+
+/* No data styling */
+.no-data {
+  padding: 40px;
+  text-align: center;
+  color: #94a3b8;
+  font-style: italic;
+}

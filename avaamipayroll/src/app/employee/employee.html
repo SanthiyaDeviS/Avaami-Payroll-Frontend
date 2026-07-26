@@ -10,9 +10,7 @@
   <table class="employee-table">
     <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
-        <th>Department</th>
         <th>Role</th>
         <th>Status</th>
         <th>Action</th>
@@ -20,9 +18,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let emp of employees">
-        <td>{{ emp.id }}</td>
         <td class="emp-name">{{ emp.name }}</td>
-        <td>{{ emp.department }}</td>
         <td>{{ emp.role }}</td>
         <td>
           <span class="status-badge" [ngClass]="emp.status.toLowerCase().replace(' ', '-')">

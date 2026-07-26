@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home';
 import {EmployeesComponent } from './employee/employee';
 import {PayrollComponent} from './payroll/payroll';
 import { AddEmployeeComponent } from './components/add-employee/add-employee';
+import { PayrollSettings } from './payroll-settings/payroll-settings';
 
 export const routes: Routes = [
   // 1. Auth Routes (Full screen, no sidebar)
@@ -22,6 +23,7 @@ export const routes: Routes = [
       { path: 'employees', component: EmployeesComponent },
       { path: 'payroll', component: PayrollComponent},
       { path: 'add-employee', component: AddEmployeeComponent},
+      { path: 'payroll-settings', component: PayrollSettings },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

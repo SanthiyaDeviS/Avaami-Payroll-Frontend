@@ -66,35 +66,38 @@ export class SignupComponent {
 showNoInvitePopup = false; // Controls the dialog
 
   onSubmit() {
-    if (this.signupForm.valid) {
-      const val = this.signupForm.value;
-      const extraData = {
-        role: this.selectedRole,
-        companyName: val.companyName || null,
-        phone: val.phone || null,
-        address: val.address || null,
-        city: val.city || null,
-        state: val.state || null,
-        // We don't need companyCode anymore since we use Email Mapping
-      };
+      if (this.signupForm.valid) {
+        const val = this.signupForm.value;
+        const extraData = {
+          role: this.selectedRole,
+          companyName: val.companyName || null,
+          phone: val.phone || null,
+          address: val.address || null,
+          city: val.city || null,
+          state: val.state || null,
+        };
 
-      this.authService.signUp(val.email!, val.password!, val.username!, this.selectedRole, extraData)
-        .subscribe({
-          next: () => {
-            alert('Registration Successful!');
-            this.router.navigate(['/home']);
-          },
-          error: (err: any) => {
-            // Trigger the popup if the backend returns a 403 (No Invite Found)
-            if (err.status === 403) {
-              this.showNoInvitePopup = true;
-            } else {
-              alert('Error: ' + (err.error?.error || err.message));
+        this.authService.signUp(val.email!, val.password!, val.username!, this.selectedRole, extraData)
+          .subscribe({
+            next: () => {
+              alert('Registration Successful!');
+              this.router.navigate(['/home']);
+            },
+            error: (err: any) => {
+              // ONLY trigger the popup if the user is a 'user' (Employee)
+              // Admins should see the actual error (e.g., "Company name exists")
+              if (err.status === 403 && this.selectedRole === 'user') {
+                this.showNoInvitePopup = true;
+              } else {
+                // Extract the error message from the backend properly
+                const errorMessage = err.error?.error || err.message || 'An unknown error occurred';
+                alert('Signup Failed: ' + errorMessage);
+                console.error('Full Error Object:', err);
+              }
             }
-          }
-        });
+          });
+      }
     }
-  }
 
   closePopup() {
     this.showNoInvitePopup = false;
